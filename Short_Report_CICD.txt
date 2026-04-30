@@ -1,0 +1,105 @@
+ACEest Fitness & Gym DevOps Pipeline - Short Report
+
+Repository Link:
+https://github.com/divyakadam282002/aceest-gym-devops-pipeline
+
+1. CI/CD Architecture Overview
+
+This project implements a complete CI/CD workflow for a Flask-based API called ACEest Fitness & Gym API. The architecture follows a standard DevOps delivery model where source code is version-controlled in GitHub, validated through automated tests, containerized with Docker, published to DockerHub, and deployed to Kubernetes using Jenkins pipeline automation.
+
+At the application layer, the Flask service exposes basic routes such as '/', '/health', and '/members'. The app is designed as a lightweight REST API suitable for demonstrating deployment automation and release strategies.
+
+At the source control layer, all application code, tests, container configuration, and Kubernetes manifests are stored in GitHub. This repository is the single source of truth for the project. Every release change, including Jenkinsfile updates and deployment YAML modifications, is tracked through commits.
+
+At the CI layer, Jenkins is configured with a pipeline (Jenkinsfile). The pipeline performs the following sequence:
+- Checkout source from GitHub
+- Install dependencies
+- Run unit tests using pytest
+- Build Docker image with tagged version
+- Push image to DockerHub
+- Deploy/update Kubernetes resources using kubectl
+
+At the containerization layer, the app is packaged using Dockerfile and tagged into versions (v1 and v2). This versioned artifact strategy allows rollback and controlled upgrade in Kubernetes.
+
+At the orchestration layer, Kubernetes manages workload lifecycle. Deployment resources define desired state and rollout strategy. Service resource exposes the application via NodePort for browser testing.
+
+The project also demonstrates advanced release models:
+- Rolling update: gradual replacement of old pods with new version
+- Blue-Green deployment: parallel environment to reduce release risk
+- Canary deployment: partial traffic/testing on new version before full rollout
+
+For quality governance, SonarQube analysis is included to validate code health metrics like bugs, vulnerabilities, maintainability, and coverage. The quality gate passed with strong ratings and coverage above 80 percent.
+
+Overall architecture flow:
+GitHub -> Jenkins CI -> pytest -> Docker Build -> DockerHub Push -> Kubernetes Deploy -> Browser Validation
+
+2. Challenges Faced and Mitigation Strategies
+
+Challenge 1: Docker push namespace/host resolution issue
+During initial image push attempts, a push command used incorrect namespace formatting and capitalization. Docker interpreted part of the command as host information and failed with DNS/host lookup error.
+Mitigation:
+- Corrected DockerHub namespace to lowercase
+- Re-validated docker login and repository naming
+- Retried push with exact <namespace>/<repo>:<tag> format
+
+Challenge 2: Tag mismatch during image push
+A push command failed with "tag does not exist" because the local image tag did not match the target remote tag string.
+Mitigation:
+- Checked local images with docker images
+- Re-tagged image correctly
+- Re-ran push successfully
+
+Challenge 3: Ensuring safe production-like upgrades
+Simple direct replacement can cause service disruption if new version has runtime issues.
+Mitigation:
+- Used rolling update in Kubernetes to replace pods incrementally
+- Tracked rollout using kubectl rollout status
+- Verified deployment details using kubectl describe
+
+Challenge 4: Multi-strategy deployment understanding
+Blue-Green and Canary configurations require careful manifest separation and naming consistency.
+Mitigation:
+- Created separate manifests for standard, canary, and green deployments
+- Used explicit deployment labels/selectors to avoid conflicts
+- Verified all pods and deployments via kubectl get deployments and kubectl get pods
+
+Challenge 5: Evidence preparation for academic submission
+Assignment required proof from multiple tools and stages (terminal, dashboards, browser, CI tool).
+Mitigation:
+- Captured screenshots for each mandatory checkpoint
+- Organized outputs by deployment phase
+- Created a structured final report with figure references and checklist mapping
+
+3. Key Automation Outcomes
+
+Outcome 1: Automated validation of application quality
+pytest execution completed successfully with all tests passing. This confirms route stability before packaging and deployment.
+
+Outcome 2: Repeatable container build and release
+Docker-based packaging made the Flask application environment-independent. Versioned images (v1 and v2) were produced and pushed to DockerHub.
+
+Outcome 3: CI/CD execution through Jenkins
+Jenkins pipeline successfully orchestrated build and deployment flow, reducing manual intervention and ensuring repeatable release steps.
+
+Outcome 4: Kubernetes-based reliable runtime
+Application deployed successfully in Kubernetes with active pods and available service endpoint. NodePort exposure enabled browser-level validation.
+
+Outcome 5: Proven release strategy maturity
+Project demonstrates not only basic deployment but also advanced strategies:
+- Rolling update validated by deployment revision and rollout status
+- Blue-Green and Canary deployments verified through running workloads
+This shows practical understanding of zero/minimal downtime release patterns.
+
+Outcome 6: Quality and maintainability metrics achieved
+SonarQube results indicate:
+- Quality Gate: Passed
+- Security Rating: A
+- Maintainability Rating: A
+- Bugs: 0
+- Vulnerabilities: 0
+- Coverage above 80 percent
+These outcomes support production-readiness from a code quality perspective.
+
+Conclusion
+
+The ACEest Fitness & Gym DevOps Pipeline project successfully demonstrates an end-to-end software delivery lifecycle from source control to Kubernetes deployment. The pipeline includes testing, containerization, automated CI/CD execution, quality checks, and controlled release strategies. The project outcomes meet the assignment objectives and provide a practical implementation of modern DevOps practices.

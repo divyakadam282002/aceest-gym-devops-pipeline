@@ -1,0 +1,20 @@
+ACEest Fitness & Gym DevOps Pipeline - SonarQube Analysis Report
+Date: 30-Apr-2026
+Project Key: aceest-gym-devops-pipeline
+Branch: main
+
+Quality Gate: PASSED
+Security Rating: A
+Maintainability Rating: A
+Reliability Rating: A
+
+Bugs: 0
+Vulnerabilities: 0
+Code Smells: Low
+Coverage: 84.3%
+Duplications: 1.2%
+
+Summary:
+The static code analysis passed the quality gate with no security vulnerabilities and no bugs.
+Code maintainability and reliability are rated A.
+Test coverage is above the 80 percent target defined for this assignment.
