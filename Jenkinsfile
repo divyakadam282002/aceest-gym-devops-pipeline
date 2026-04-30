@@ -1,18 +1,23 @@
 pipeline {
 
-    agent any
+    agent {
+        docker {
+            image 'python:3.10'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     stages {
 
-        stage('Check Python') {
+        stage('Verify Python') {
             steps {
-                sh 'python3 --version || python --version'
+                sh 'python --version'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip3 install -r requirements.txt || pip install -r requirements.txt'
+                sh 'pip install -r requirements.txt'
             }
         }
 
