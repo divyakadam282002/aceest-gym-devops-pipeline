@@ -1,13 +1,11 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.10'
+        }
+    }
 
     stages {
-
-        stage('Clone Repository') {
-            steps {
-                echo 'Cloning repository...'
-            }
-        }
 
         stage('Install Dependencies') {
             steps {
