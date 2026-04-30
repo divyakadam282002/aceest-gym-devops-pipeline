@@ -1,15 +1,18 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.10'
-        }
-    }
+
+    agent any
 
     stages {
 
+        stage('Check Python') {
+            steps {
+                sh 'python3 --version || python --version'
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh 'pip3 install -r requirements.txt || pip install -r requirements.txt'
             }
         }
 
@@ -28,6 +31,7 @@ pipeline {
     }
 
     post {
+
         success {
             echo 'Pipeline executed successfully!'
         }
@@ -35,5 +39,6 @@ pipeline {
         failure {
             echo 'Pipeline failed.'
         }
+
     }
 }
