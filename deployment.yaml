@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-gym
+  labels:
+    app: aceest-gym
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: aceest-gym
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+
+  template:
+    metadata:
+      labels:
+        app: aceest-gym
+
+    spec:
+      containers:
+      - name: aceest-gym
+        image: kadamdivya/aceest-gym:v1
+        ports:
+        - containerPort: 5000

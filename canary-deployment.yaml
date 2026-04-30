@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-gym-canary
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: aceest-gym
+      version: canary
+
+  template:
+    metadata:
+      labels:
+        app: aceest-gym
+        version: canary
+
+    spec:
+      containers:
+      - name: aceest-gym
+        image: kadamdivya/aceest-gym:v2
+        ports:
+        - containerPort: 5000

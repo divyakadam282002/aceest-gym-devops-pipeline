@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-gym-green
+  labels:
+    app: aceest-gym
+    version: green
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: aceest-gym
+      version: green
+
+  template:
+    metadata:
+      labels:
+        app: aceest-gym
+        version: green
+
+    spec:
+      containers:
+      - name: aceest-gym
+        image: kadamdivya/aceest-gym:v2
+        ports:
+        - containerPort: 5000

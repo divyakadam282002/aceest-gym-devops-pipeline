@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: aceest-gym
+
+spec:
+  selector:
+    app: aceest-gym
+
+  type: NodePort
+
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 31961
